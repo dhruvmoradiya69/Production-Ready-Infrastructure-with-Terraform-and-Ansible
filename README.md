@@ -99,12 +99,17 @@ terraform plan
 
 5. Apply the infrastructure:
 ```bash
-terraform apply
+terraform apply --auto-approve
 ```
 
 6. Output the public IP addresses of the EC2 instances:
 ```bash
 terraform output
+```
+
+7. Destroy the infrastructure when done:
+```bash
+terraform destroy --auto-approve
 ```
 
 ### Ansible Setup
@@ -153,7 +158,7 @@ ansible-galaxy init nginx-role
     dest: /var/www/html
 
 # make sure to create index.html in the files directory
----
+```
 
 5. Deploy Nginx using the role:
 ```bash
