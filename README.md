@@ -28,25 +28,45 @@ The infrastructure is provisioned across three environments:
 
 ```
 .
+├── README.md
 ├── ansible/
-│   ├── inventories/         # Environment-specific inventories
-│   │   ├── dev
-│   │   ├── prod  
-│   │   └── stage
-│   ├── playbooks/          # Ansible playbooks
-│   │   ├── install_nginx.yml
-│   │   └── roles/
-│   │       └── nginx-role/
-│   └── update_inventory.sh  # Script to update inventories
+│   ├── update_inventory.sh
+│   ├── inventories/
+│   │   ├── dev/
+│   │   ├── prod/
+│   │   └── stage/
+│   └── playbooks/
+│       ├── install_nginx.yml
+│       └── roles/
+│           └── nginx-role/
+│               ├── README.md
+│               ├── defaults/
+│               │   └── main.yml
+│               ├── files/
+│               │   └── index.html
+│               ├── handlers/
+│               │   └── main.yml
+│               ├── meta/
+│               │   └── main.yml
+│               ├── tasks/
+│               │   └── main.yml
+│               ├── tests/
+│               │   ├── inventory
+│               │   └── test.yml
+│               └── vars/
+│                   └── main.yml
 └── terraform/
-    ├── infra/              # Terraform modules
-    │   ├── dynamodb.tf
-    │   ├── ec2.tf
-    │   ├── output.tf
-    │   ├── s3_bucket.tf
-    │   └── variable.tf
-    ├── main.tf             # Main Terraform configuration
-    └── provider.tf         # AWS provider configuration
+    ├── main.tf
+    ├── provider.tf
+    ├── terraform.tf
+    └── infra/
+        ├── dynamodb.tf
+        ├── ec2.tf
+        ├── output.tf
+        ├── s3_bucket.tf
+        └── variable.tf
+
+
 ```
 
 ## Getting Started
@@ -58,20 +78,35 @@ The infrastructure is provisioned across three environments:
 
 ### Terraform Setup
 
-1. Initialize Terraform:
+1. Change directory to Terraform:
 ```bash
 cd terraform
+```
+
+2. create a ssh key pair:
+```bash
+# key pair name: infra-key
+ssh-keygen -t rsa -b 4096 -C "infra-key"
+```
+
+3. Initialize Terraform:
+```bash
 terraform init
 ```
 
-2. Review the infrastructure plan:
+4. Review the infrastructure plan:
 ```bash 
 terraform plan
 ```
 
-3. Apply the infrastructure:
+5. Apply the infrastructure:
 ```bash
 terraform apply
+```
+
+6. Output the public IP addresses of the EC2 instances:
+```bash
+terraform output
 ```
 
 ### Ansible Setup
@@ -86,18 +121,28 @@ cd ansible
 ```bash
 #ping all servers dev prod stage
 ansible -i inventories/dev servers -m ping
+ansible -i inventories/prod servers -m ping
+ansible -i inventories/stage servers -m ping
 ```
 
 3. Install Ansible roles:
 ```bash
-# Install the nginx role
+# Install the nginx role in playbook directory
+cd playbooks
 ansible-galaxy init nginx-role
 ```
 
-4. Deploy Nginx using the role:
+4. Edit the `nginx-role` tasks to install and configure Nginx:
+```yaml
+# ansible/playbooks/roles/nginx-role/tasks/main.yml
+---
+
+5. Deploy Nginx using the role:
 ```bash
 # Run the playbook for the dev, prod, and stage environments
 ansible-playbook -i inventories/dev playbooks/install_nginx.yml
+ansible-playbook -i inventories/prod playbooks/install_nginx.yml
+ansible-playbook -i inventories/stage playbooks/install_nginx.yml
 ```
 
 ## Infrastructure Details
