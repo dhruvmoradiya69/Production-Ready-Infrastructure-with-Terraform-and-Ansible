@@ -65,8 +65,6 @@ The infrastructure is provisioned across three environments:
         ├── output.tf
         ├── s3_bucket.tf
         └── variable.tf
-
-
 ```
 
 ## Getting Started
@@ -133,8 +131,28 @@ ansible-galaxy init nginx-role
 ```
 
 4. Edit the `nginx-role` tasks to install and configure Nginx:
-```yaml
+```bash
 # ansible/playbooks/roles/nginx-role/tasks/main.yml
+---
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+
+- name: Start & Enable Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Deploy Web Page
+  copy:
+    src: index.html
+    dest: /var/www/html
+
+# make sure to create index.html in the files directory
 ---
 
 5. Deploy Nginx using the role:
