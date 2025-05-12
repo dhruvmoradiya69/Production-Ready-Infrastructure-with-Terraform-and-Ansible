@@ -1,0 +1,6 @@
+---
+  - name: install nginx using roles
+    hosts: servers
+    become: true
+    roles:
+      - nginx-role
