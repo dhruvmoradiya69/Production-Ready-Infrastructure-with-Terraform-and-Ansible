@@ -28,43 +28,51 @@ The infrastructure is provisioned across three environments:
 
 ```
 .
+├── ansible
+│   ├── inventories
+│   │   ├── dev
+│   │   ├── proud
+│   │   └── stage
+│   ├── playbooks
+│   │   ├── install_nginx.yml
+│   │   └── roles
+│   │       └── nginx-role
+│   │           ├── defaults
+│   │           │   └── main.yml
+│   │           ├── files
+│   │           │   └── index.html
+│   │           ├── handlers
+│   │           │   └── main.yml
+│   │           ├── meta
+│   │           │   └── main.yml
+│   │           ├── README.md
+│   │           ├── tasks
+│   │           │   └── main.yml
+│   │           ├── templates
+│   │           ├── tests
+│   │           │   ├── inventory
+│   │           │   └── test.yml
+│   │           └── vars
+│   │               └── main.yml
+│   └── update_invetory.sh
+├── backend-terra
+│   ├── main.tf
+│   └── terrafrom.tf
 ├── README.md
-├── ansible/
-│   ├── update_inventory.sh
-│   ├── inventories/
-│   │   ├── dev/
-│   │   ├── prod/
-│   │   └── stage/
-│   └── playbooks/
-│       ├── install_nginx.yml
-│       └── roles/
-│           └── nginx-role/
-│               ├── README.md
-│               ├── defaults/
-│               │   └── main.yml
-│               ├── files/
-│               │   └── index.html
-│               ├── handlers/
-│               │   └── main.yml
-│               ├── meta/
-│               │   └── main.yml
-│               ├── tasks/
-│               │   └── main.yml
-│               ├── tests/
-│               │   ├── inventory
-│               │   └── test.yml
-│               └── vars/
-│                   └── main.yml
-└── terraform/
+└── terrafrom
+    ├── infra
+    │   ├── dyanomdb.tf
+    │   ├── ec2.tf
+    │   ├── output.tf
+    │   ├── s3_bucket.tf
+    │   └── variable.tf
+    ├── infra-key
+    ├── infra-key.pub
     ├── main.tf
     ├── provider.tf
-    ├── terraform.tf
-    └── infra/
-        ├── dynamodb.tf
-        ├── ec2.tf
-        ├── output.tf
-        ├── s3_bucket.tf
-        └── variable.tf
+    ├── terraform.tfstate
+    ├── terraform.tfstate.backup
+    └── terrafrom.tf
 ```
 
 ## Getting Started
